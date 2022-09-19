@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+<<<<<<< HEAD
 import { Aluno } from '../../../common/aluno';
 import { AlunoService } from './aluno.service';
+=======
+ import { NgModule } from '@angular/core';
+
+  import { Aluno } from './aluno';
+ import { AlunoService } from './aluno.service';
+>>>>>>> 1fe31ee829a9bdf34c8a0c5a50129fb32d996d88
 
   @Component({
    selector: 'app-root',
@@ -8,39 +15,27 @@ import { AlunoService } from './aluno.service';
    styleUrls: ['./alunos.component.css']
  })
  export class AlunosComponent implements OnInit {
-
-    aluno: Aluno = new Aluno();
-    alunos: Aluno[] = [];
-    cpfduplicado: boolean = false;
-
     constructor(private alunoService: AlunoService) {}
 
-     criarAluno(a: Aluno): void {
-       this.alunoService.criar(a)
-              .subscribe(
-                ar => {
-                  if (ar) {
-                    this.alunos.push(ar);
-                    this.aluno = new Aluno();
-                  } else {
-                    this.cpfduplicado = true;
-                  } 
-                },
-                msg => { alert(msg.message); }
-              );
-        alert("Já executei o criar e o subscribe!");
-    } 
+    aluno: Aluno = new Aluno();
+    alunos: Aluno[];
+    cpfduplicado: boolean = false;
 
-    onMove(): void {
+     criarAluno(a: Aluno): void {
+      if (this.alunoService.criar(a)) {
+        this.alunos.push(a);
+        this.aluno = new Aluno();
+      } else {
+        this.cpfduplicado = true;
+      }
+    }
+
+     onMove(): void {
        this.cpfduplicado = false;
     }
 
      ngOnInit(): void {
-       this.alunoService.getAlunos()
-             .subscribe(
-               as => { this.alunos = as; },
-               msg => { alert(msg.message); }
-              );
-     }
+      this.alunos = this.alunoService.getAlunos();
+    }
 
   }
