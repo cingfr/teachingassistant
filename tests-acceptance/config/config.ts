@@ -6,6 +6,8 @@ export let config: Config = {
 
     SELENIUM_PROMISE_MANAGER: false,
 
+    directConnect: true,
+
     capabilities: {
         browserName: 'firefox'
     },
