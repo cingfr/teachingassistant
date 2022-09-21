@@ -23,6 +23,16 @@ export class CadastroDeAlunos {
      return result;
    }
 
+   remover(cpf: String) : Boolean {
+    const result: Aluno = this.alunos.find(a => a.cpf == cpf);
+    const index = this.alunos.indexOf(result)
+    if (index > -1){
+      this.alunos.splice(this.alunos.indexOf(result), 1);
+      return true;
+    }
+    return false;
+  }
+
     getAlunos(): Aluno[] {
      return this.alunos;
    }
