@@ -28,7 +28,12 @@ import { AlunoService } from './aluno.service';
                 },
                 msg => { alert(msg.message); }
               );
-    } 
+    }
+
+    removerAluno(a: Aluno): void {
+      this.alunoService.remover(a).subscribe() // back
+      this.alunos = this.alunos.filter(al => al.nome != a.nome)//REMOVER
+    }
 
     onMove(): void {
        this.cpfduplicado = false;

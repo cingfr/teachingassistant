@@ -14,6 +14,10 @@ async function criarAluno(name, cpf) {
     await element(by.buttonText('Adicionar')).click();
 }
 
+async function removerAluno(cpf) {
+    await element(by.name('botaoremover' + cpf)).click();
+}
+
 async function assertTamanhoEqual(set,n) {
     await set.then(elems => expect(Promise.resolve(elems.length)).to.eventually.equal(n));
 }
@@ -27,7 +31,7 @@ async function assertElementsWithSameCPFAndName(n,cpf,name) {
 async function assertElementsWithSameCPF(n,cpf) {
     var allalunos : ElementArrayFinder = element.all(by.name('alunolist'));
     var samecpfs = allalunos.filter(elem => sameCPF(elem,cpf));
-    await assertTamanhoEqual(samecpfs,n); 
+    await assertTamanhoEqual(samecpfs,n);
 }
 
 defineSupportCode(function ({ Given, When, Then }) {
@@ -38,7 +42,7 @@ defineSupportCode(function ({ Given, When, Then }) {
     })
 
     Given(/^I cannot see a student with CPF "(\d*)" in the students list$/, async (cpf) => {
-        await assertElementsWithSameCPF(0,cpf);
+        await assertElementsWithSameCPF(0, cpf);
     });
 
     When(/^I try to register the student "([^\"]*)" with CPF "(\d*)"$/, async (name, cpf) => {
@@ -61,5 +65,17 @@ defineSupportCode(function ({ Given, When, Then }) {
     Then(/^I can see an error message$/, async () => {
         var allmsgs : ElementArrayFinder = element.all(by.name('msgcpfexistente'));
         await assertTamanhoEqual(allmsgs,1);
+    });
+
+    Given(/^I can see an already-registered student with CPF "(\d*)" in the students list$/, async (cpf) => {
+        await criarAluno("Aluno 3", cpf);
+        await assertElementsWithSameCPF(1, cpf);
+    });
+
+    When(/^I try to delete the student with CPF "(\d*)"$/, async (cpf) => {
+        await removerAluno(cpf);
+    });
+    Then(/^I cannot see the student with CPF "(\d*)" in the students list$/, async (cpf) => {
+        await assertElementsWithSameCPF(0, cpf);
     });
 })
